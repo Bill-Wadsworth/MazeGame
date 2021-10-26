@@ -1,36 +1,40 @@
+import pygame
 import random
 
 class MazeGenorator():
-    def __init__(self, Width, Height):
-        #self.Board = [[0 for i in range(Width)] for i in range(Lenght)]
+    def __init__(self, Width, Height, Scale):
+        self.Scale = Scale
         self.Width = Width
         self.Height = Height
-        self.StartCoord = [int(Width/2), int(Height/2)]
+        self.StartCoord = [1, 1]
         self.Spaces = [self.StartCoord]
         self.GenorateAMaze()
-        self.TempMazePrint()
 
-    def TempMazePrint(self):
-            printString = ""
-            for l in range(0, self.Height):
-                for w in range(0, self.Width):
-                    if [w, l] in self.Spaces:
-                        printString += "  "
-                    else:
-                        printString += "##"
-                printString += "\n"
-            print(printString)
+    def drawTextMaze(self):
+        text = ""
+        for h in range(0, self.Height):
+            for w in range(0, self.Width):
+                if [w, h] in self.Spaces:
+                    text += "  "
+                else:
+                    text += "##"
+            text += "\n"
+        print(text)
+
+    def MazeDraw(self, screen):
+        for Coords in self.Spaces:
+            pygame.draw.rect(screen, (255, 255, 255), (Coords[0]*self.Scale, Coords[1]*self.Scale, self.Scale, self.Scale))
         
     def CheckSurroundingSquares(self, Coords):
         PotentialSquares = []
-        if [Coords[1]+1, Coords[0]] not in self.Spaces and Coords[1]+1 < self.Height:
-            PotentialSquares.append([Coords[1]+1, Coords[0]])
-        if [Coords[1]-1, Coords[0]] not in self.Spaces and Coords[1]-1 > -1:
-            PotentialSquares.append([Coords[1]-1, Coords[0]])
-        if [Coords[1], Coords[0]+1] not in self.Spaces and Coords[0]+1 < self.Width:
-            PotentialSquares.append([Coords[1], Coords[0]+1])
-        if [Coords[1], Coords[0]-1] not in self.Spaces and Coords[0]-1 > -1:
-            PotentialSquares.append([Coords[1], Coords[0]-1])
+        if [Coords[0]+1, Coords[1]] not in self.Spaces and Coords[0]+1 < self.Height:
+            PotentialSquares.append([Coords[0]+1, Coords[1]])
+        if [Coords[0]-1, Coords[1]] not in self.Spaces and Coords[0]-1 > -1:
+            PotentialSquares.append([Coords[0]-1, Coords[1]])
+        if [Coords[0], Coords[1]+1] not in self.Spaces and Coords[1]+1 < self.Width:
+            PotentialSquares.append([Coords[0], Coords[1]+1])
+        if [Coords[0], Coords[1]-1] not in self.Spaces and Coords[1]-1 > -1:
+            PotentialSquares.append([Coords[0], Coords[1]-1])
         
         return PotentialSquares
             
